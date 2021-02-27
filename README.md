@@ -22,3 +22,5 @@ Sqflite example with bloc and stream
 [My Github](https://github.com/wayne900204),
 📫  Reach me  **wayne900204@gmail.com**
 # Flutter-Stream-Bloc-Sqflite
+
+![ScreenShot](https://github.com/wayne900204/Flutter-Stream-Bloc-Sqflite/blob/main/sqflite.gif)
