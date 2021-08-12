@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 // own import
-import 'package:sqflite_bloc/bloc/add_users_bloc.dart';
 import 'package:sqflite_bloc/models/userModel.dart';
+import 'package:sqflite_bloc/provider/add_users_bloc.dart';
 import 'package:sqflite_bloc/widgets/add_user_dialog.dart';
 
 class HomeList extends StatelessWidget {
   final List<UserModel> data;
-  final AddUsersBloc addUsersBloc;
+  final AddUsersProvider addUsersBloc;
 
-  HomeList({@required this.data, @required this.addUsersBloc});
+  HomeList({required this.data, required this.addUsersBloc});
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +65,7 @@ class HomeList extends StatelessWidget {
                               icon: const Icon(Icons.delete_forever,
                                   color: Colors.cyan),
                               onPressed: () async {
-                                addUsersBloc.isDeleteUser.add(data[index].id);
+                                addUsersBloc.isDeleteUser.add(data[index].id!);
                               }),
                         ],
                       ),

@@ -1,10 +1,10 @@
 import 'dart:async';
 // own import
+import 'package:flutter/material.dart';
 import 'package:sqflite_bloc/db/user_db.dart';
 import 'package:sqflite_bloc/models/userModel.dart';
-import 'add_user_bloc_provider.dart';
 
-class AddUsersBloc implements BlocBase {
+class AddUsersProvider extends ChangeNotifier{
 
   // Create a broadcast controller that allows this stream to be listened
   // to multiple times. This is the primary, if not only, type of stream you'll be using.
@@ -14,23 +14,18 @@ class AddUsersBloc implements BlocBase {
   // Output stream. This one will be used within our pages to display the users.
   Stream<List<UserModel>> get getUserStream => _usersController.stream;
 
-
-
   final _insertController = StreamController<UserModel>.broadcast();
   final _updateController = StreamController<UserModel>.broadcast();
   final _deleteController  = StreamController<int>.broadcast();
   final _searchController = StreamController<String>.broadcast();
-
 
   StreamSink<UserModel> get insertUser => _insertController.sink;
   StreamSink<UserModel> get inUpdateUser => _updateController.sink;
   StreamSink<int> get isDeleteUser => _deleteController.sink;
   StreamSink<String> get isSearchUser => _searchController.sink;
 
-
-
   // Input stream for adding new users. We'll call this from our pages.
-  AddUsersBloc() {
+  AddUsersProvider() {
     // Retrieve all the users on initialization
     updateScreenData();
     _updateController.stream.listen(_handleUpdateUser);
@@ -38,14 +33,6 @@ class AddUsersBloc implements BlocBase {
     _insertController.stream.listen(_handleAddUser);
     _deleteController.stream.listen(_handleDeleteUser);
     _searchController.stream.listen(_handleSearchUser);
-  }
-
-  void updateScreenData() async {
-    // Retrieve all the users from the database
-    List<UserModel> users = await UserDBProvider.db.getUser();
-
-    // Add all of the users to the stream so we can grab them later from our pages
-    _inUserSink.add(users);
   }
 
   void _handleAddUser(UserModel userModel) async {
@@ -70,7 +57,7 @@ class AddUsersBloc implements BlocBase {
 
     List<UserModel> user = await UserDBProvider.db.getUser();
 
-    var dummyListData = List<UserModel>();
+    var dummyListData = <UserModel>[];
     user.forEach((stud) {
       var st2 = UserModel(id: stud.id, lastName: stud.lastName,firstName: stud.firstName,time: stud.time);
       if ((st2.firstName.toLowerCase()+" "+st2.lastName.toLowerCase()).contains(text.toLowerCase())
@@ -84,6 +71,13 @@ class AddUsersBloc implements BlocBase {
     _inUserSink.add(dummyListData);
   }
 
+  void updateScreenData() async {
+    // Retrieve all the users from the database
+    List<UserModel> users = await UserDBProvider.db.getUser();
+    // Add all of the users to the stream so we can grab them later from our pages
+    _inUserSink.add(users);
+  }
+
   // All stream controllers you create should be closed within this function
   @override
   void dispose() {
@@ -92,5 +86,6 @@ class AddUsersBloc implements BlocBase {
     _deleteController.close();
     _updateController.close();
     _searchController.close();
+    super.dispose();
   }
 }

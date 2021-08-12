@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 // own import
-import 'package:sqflite_bloc/bloc/add_users_bloc.dart';
 import 'package:sqflite_bloc/models/userModel.dart';
+import 'package:sqflite_bloc/provider/add_users_bloc.dart';
 class AddUserDialog extends StatelessWidget {
   final BuildContext context;
   final bool isEdit;
 
-  final AddUsersBloc addUsersBloc;
-  final UserModel userModel;
+  final AddUsersProvider addUsersBloc;
+  final UserModel? userModel;
 
   AddUserDialog(this.context, this.isEdit, this.addUsersBloc, this.userModel);
 
@@ -81,7 +81,7 @@ class AddUserDialog extends StatelessWidget {
     if (isEdit == false) {
       addUsersBloc.insertUser.add(UserModel( firstName: _firstNameController.text,lastName: _lastNameController.text,time: nowTime()));
     } else {
-      addUsersBloc.inUpdateUser.add(UserModel(id: userModel.id, firstName: _firstNameController.text,lastName: _lastNameController.text,time: nowTime()));
+      addUsersBloc.inUpdateUser.add(UserModel(id: userModel!.id, firstName: _firstNameController.text,lastName: _lastNameController.text,time: nowTime()));
     }
   }
   String nowTime(){

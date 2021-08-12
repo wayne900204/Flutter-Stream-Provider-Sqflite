@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 // own import
-import 'package:sqflite_bloc/bloc/add_user_bloc_provider.dart';
-import 'package:sqflite_bloc/bloc/add_users_bloc.dart';
 import 'package:sqflite_bloc/models/userModel.dart';
+import 'package:sqflite_bloc/provider/add_users_bloc.dart';
 import 'package:sqflite_bloc/widgets/home_list.dart';
 class ShowAll extends StatefulWidget {
   @override
@@ -10,13 +10,19 @@ class ShowAll extends StatefulWidget {
 }
 
 class _ShowAllState extends State<ShowAll> {
-  AddUsersBloc addUsersBloc;
+  late AddUsersProvider addUsersBloc;
   TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    addUsersBloc = AddUserBlocProvider.of<AddUsersBloc>(context);
+  }
+
+
+  @override
+  void didChangeDependencies() {
+    addUsersBloc = context.watch<AddUsersProvider>();
+    super.didChangeDependencies();
   }
 
   @override
@@ -32,10 +38,10 @@ class _ShowAllState extends State<ShowAll> {
         // Make sure data exists and is actually loaded
         if (snapshot.hasData) {
           // If there are no user (data), display this message.
-          if (snapshot.data.length == 0) {
+          if (snapshot.data!.length == 0) {
             return Text('No Data');
           }
-          return HomeList(data: snapshot.data,addUsersBloc: addUsersBloc);
+          return HomeList(data: snapshot.data! ,addUsersBloc: addUsersBloc);
         }
         return Center(
           child: CircularProgressIndicator(),

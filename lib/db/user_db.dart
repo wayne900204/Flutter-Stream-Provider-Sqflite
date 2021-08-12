@@ -5,17 +5,17 @@ import 'package:sqflite_bloc/models/userModel.dart';
 
 class UserDBProvider {
   // Create a singleton
-  UserDBProvider();
+  // UserDBProvider();
 
   static final UserDBProvider db = UserDBProvider();
-  Database _database;
+  Database? _database;
 
   Future<Database> get database async {
     if (_database != null) {
-      return _database;
+      return _database!;
     }
     _database = await openDb();
-    return _database;
+    return _database!;
   }
 
   Future openDb() async {
